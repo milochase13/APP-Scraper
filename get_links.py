@@ -1,0 +1,16 @@
+import requests
+from bs4 import BeautifulSoup
+
+def get_links(gen_url, subsection, items = 5000):
+    url = gen_url + subsection + "?items_per_page=" + str(items)
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, "html.parser")
+    content = soup.find(class_="view-content")
+    sections = content.find_all("div", class_="views-row")
+    links = []
+    for section in sections:
+        link = section.find("a")
+        links.append(link['href'])
+    print(links)
+
+get_links("https://www.presidency.ucsb.edu/documents/app-categories/elections-and-transitions/", "debates")
