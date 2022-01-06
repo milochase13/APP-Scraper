@@ -20,13 +20,28 @@ def get_speeches(url, soup):
     del speeches[0:2]
     return speeches
 
+def get_docs(url, soup):
+    body = soup.find(class_="field-docs-content")
+    speaker = soup.find(class_="field-title").text.replace("\n", '')
+    speeches = []
+    turns = body.find_all("p")
+    for turn in turns:
+        speech = {"text" : [], "tokenized" : []}
+        speech["speaker"] = speaker
+        unitalize = ''.join([e.strip() for e in turn if not e.name and e.strip()]) # remove italisized text
+        speech["text"].append(unitalize) 
+        speech["tokenized"].append(unitalize.split()) 
+        speeches.append(speech)
+    del speeches[0:2]
+    return speeches
+
 def parse_debate(url):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
 
     # metadata
-    name = soup.find(class_="field-ds-doc-title").text
-    date = soup.find(class_="field-docs-start-date-time").text
+    name = soup.find(class_="field-ds-doc-title").text.replace("\n", '')
+    date = soup.find(class_="date-display-single").text.replace("\n", '')
     metadata = {
         "url" : url,
         "name" : name,
@@ -34,7 +49,7 @@ def parse_debate(url):
     }
     
     # data
-    speeches = get_speeches(url, soup)
+    speeches = get_docs(url, soup) #get_speeches(url, soup)
     data = {
         "url" : url,
         "speeches" : speeches
@@ -46,7 +61,4 @@ def build_file(data, file_name):
         json.dump(data, f)
         f.write("\n")
 
-
-#init_file(parse_debate("https://www.presidency.ucsb.edu/documents/presidential-debate-belmont-university-nashville-tennessee-0"), "data.jsonlist")
-build_file(parse_debate("https://www.presidency.ucsb.edu/documents/democratic-candidates-debate-charleston-south-carolina-0"), "data.jsonlist")
-build_file(parse_debate("https://www.presidency.ucsb.edu/documents/presidential-debate-belmont-university-nashville-tennessee-0"), "data.jsonlist")
+#build_file(parse_debate("https://www.presidency.ucsb.edu/documents/remarks-the-white-house-correspondents-association-dinner-12")[0], "test.jsonlist")
