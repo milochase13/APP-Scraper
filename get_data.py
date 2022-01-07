@@ -1,25 +1,32 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import gzip
 
 def get_speeches(url, soup, mode):
+
     pres = soup.find(class_="field-title").text.replace("\n", '')
     body = soup.find(class_="field-docs-content")
     speeches = []
     turns = body.find_all("p")
+    speaker = "unknown"
+
     for turn in turns:
         speech = {"text" : [], "tokenized" : []}
-        speaker = ""
         if mode == "debates":
+            spkr = turn.text.split(':')[0]
             if turn.find("b"):
-                speaker = turn.find("b")
-            elif turn.find("br"):
-                speaker = turn.find("br")
+                speaker = turn.find("b").text
+            elif turn.find("strong"):
+                speaker = turn.find("strong").text
+            elif spkr.isupper():
+                speaker = spkr
         else:
             speaker = pres
+
         if speaker:
             if mode == "debates":
-                speech["speaker"] = speaker.text
+                speech["speaker"] = speaker
                 paragraph = ""
                 try:
                     paragraph = turn.contents[1].text
@@ -29,31 +36,20 @@ def get_speeches(url, soup, mode):
                 speech["tokenized"].append(paragraph.split()) 
             else:
                 speech["speaker"] = speaker
-                unitalize = ''.join([e.strip() for e in turn if not e.name and e.strip()]) # remove italisized text
-                speech["text"].append(unitalize) 
-                speech["tokenized"].append(unitalize.split()) 
+                speech["text"].append(turn.text) 
+                speech["tokenized"].append(turn.text.split()) 
             speeches.append(speech)
         else:
             speeches[-1]["text"].append(turn.text) 
             speeches[-1]["tokenized"].append(turn.text.split()) 
-    if mode == "debates":
-        del speeches[0:2]
-    return speeches
+        speaker = ""
 
-def get_docs(url, soup):
-    body = soup.find(class_="field-docs-content")
-    speaker = soup.find(class_="field-title").text.replace("\n", '')
-    speeches = []
-    turns = body.find_all("p")
-    for turn in turns:
-        speech = {"text" : [], "tokenized" : []}
-        speech["speaker"] = speaker
-        unitalize = ''.join([e.strip() for e in turn if not e.name and e.strip()]) # remove italisized text
-        speech["text"].append(unitalize) 
-        speech["tokenized"].append(unitalize.split()) 
-        speeches.append(speech)
-    if mode == "debate":
-        del speeches[0:2]
+    if len(speeches) > 1:
+        if speeches[1]["speaker"] == "PARTICIPANTS" or "MODERATORS":
+            del speeches[1] 
+        if speeches[0] and speeches[0]["speaker"] == "PARTICIPANTS" or "MODERATORS":
+            del speeches[0] 
+
     return speeches
 
 def parse_debate(url, mode):
@@ -75,11 +71,23 @@ def parse_debate(url, mode):
         "url" : url,
         "speeches" : speeches
     }
-    return data, metadata
+
+    # raw data
+    raw_data = {
+        "url" : url,
+        "html" : str(soup)
+    }
+
+    return data, metadata, raw_data
 
 def build_file(data, file_name):
     with open(file_name, 'a+') as f:
         json.dump(data, f)
         f.write("\n")
 
-#build_file(parse_debate("https://www.presidency.ucsb.edu/documents/remarks-the-white-house-correspondents-association-dinner-12")[0], "test.jsonlist")
+def zip_file(filename):
+    f_in = open(filename)
+    f_out = gzip.open(filename + '.gz', 'wt')
+    f_out.writelines(f_in)
+    f_out.close()
+    f_in.close()

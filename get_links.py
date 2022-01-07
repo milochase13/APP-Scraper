@@ -12,5 +12,3 @@ def get_links(gen_url, subsection, items = 5000):
         link = section.find("a")
         links.append(link['href'])
     return links
-
-get_links("https://www.presidency.ucsb.edu/documents/app-categories/elections-and-transitions/", "debates")
