@@ -2,22 +2,42 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-def get_speeches(url, soup):
+def get_speeches(url, soup, mode):
+    pres = soup.find(class_="field-title").text.replace("\n", '')
     body = soup.find(class_="field-docs-content")
     speeches = []
     turns = body.find_all("p")
     for turn in turns:
         speech = {"text" : [], "tokenized" : []}
-        speaker = turn.find("b")
+        speaker = ""
+        if mode == "debates":
+            if turn.find("b"):
+                speaker = turn.find("b")
+            elif turn.find("br"):
+                speaker = turn.find("br")
+        else:
+            speaker = pres
         if speaker:
-            speech["speaker"] = speaker.text
-            speech["text"].append(turn.contents[1].text) 
-            speech["tokenized"].append(turn.contents[1].text.split()) 
+            if mode == "debates":
+                speech["speaker"] = speaker.text
+                paragraph = ""
+                try:
+                    paragraph = turn.contents[1].text
+                except:
+                    paragraph = turn.text
+                speech["text"].append(paragraph) 
+                speech["tokenized"].append(paragraph.split()) 
+            else:
+                speech["speaker"] = speaker
+                unitalize = ''.join([e.strip() for e in turn if not e.name and e.strip()]) # remove italisized text
+                speech["text"].append(unitalize) 
+                speech["tokenized"].append(unitalize.split()) 
             speeches.append(speech)
         else:
             speeches[-1]["text"].append(turn.text) 
             speeches[-1]["tokenized"].append(turn.text.split()) 
-    del speeches[0:2]
+    if mode == "debates":
+        del speeches[0:2]
     return speeches
 
 def get_docs(url, soup):
@@ -32,10 +52,11 @@ def get_docs(url, soup):
         speech["text"].append(unitalize) 
         speech["tokenized"].append(unitalize.split()) 
         speeches.append(speech)
-    del speeches[0:2]
+    if mode == "debate":
+        del speeches[0:2]
     return speeches
 
-def parse_debate(url):
+def parse_debate(url, mode):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
 
@@ -49,7 +70,7 @@ def parse_debate(url):
     }
     
     # data
-    speeches = get_docs(url, soup) #get_speeches(url, soup)
+    speeches = get_speeches(url, soup, mode)
     data = {
         "url" : url,
         "speeches" : speeches
