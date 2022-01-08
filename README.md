@@ -14,23 +14,23 @@ Documents from all modes were scraped in the same three general json formats:
 1. [mode].jsonlist
   {   
    &emsp;  - 'url' : url of html page data taken from  
-     - 'speeches' : each new author/speaker creates a speech   
-             - 'speaker' : author/speaker of speech  
-             - 'paragraphs' : list of paragraphs in given speech (as String)  
-             - 'tokenized_paragraphs' : tokenized paragraphs   
+   &emsp;  - 'speeches' : each new author/speaker creates a speech   
+   &emsp;          - 'speaker' : author/speaker of speech  
+   &emsp;          - 'paragraphs' : list of paragraphs in given speech (as String)  
+   &emsp;          - 'tokenized_paragraphs' : tokenized paragraphs   
   }   
  
  2. metadata_[mode].jsonlist   
   {   
-      - 'url' : url of html page data taken from   
-      - 'date' : string representing creation date of data   
-      - 'name' : title of document   
+   &emsp;   - 'url' : url of html page data taken from   
+   &emsp;   - 'date' : string representing creation date of data   
+   &emsp;   - 'name' : title of document   
   }   
  
  3. raw_data_[mode].jsonlist   
   {  
-      - 'url' : url of html page data taken from  
-      - 'html' : raw html of data scraped (in String form)  
+  &emsp;   - 'url' : url of html page data taken from  
+  &emsp;    - 'html' : raw html of data scraped (in String form)  
   }  
   
   
