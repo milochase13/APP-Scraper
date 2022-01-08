@@ -47,8 +47,6 @@ def get_speeches(url, soup, mode):
             speeches[-1]["tokenized"].append(turn.text.split()) 
         speaker = ""
 
-    # if speeches[0]["speaker"] == "PARTICIPANTS" or speeches[0]["speaker"] == "MODERATORS":
-    #     del speeches[0] 
     return speeches
 
 def parse_debate(url, mode):
