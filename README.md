@@ -13,7 +13,7 @@ Documents from all modes were scraped in the same three general json formats:
 
 1. [mode].jsonlist
   {   
-     - 'url' : url of html page data taken from  
+   \emsp  - 'url' : url of html page data taken from  
      - 'speeches' : each new author/speaker creates a speech   
              - 'speaker' : author/speaker of speech  
              - 'paragraphs' : list of paragraphs in given speech (as String)  
