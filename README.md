@@ -12,13 +12,12 @@ Data collected from the following 5 subsections or "modes":
 Documents from all modes were scraped in the same three general json formats:  
 
 1. [mode].jsonlist
-
   {   
-    - 'url' : url of html page data taken from  
-    - 'speeches' : each new author/speaker creates a speech   
-          - 'speaker' : author/speaker of speech  
-          - 'paragraphs' : list of paragraphs in given speech (as String)  
-          - 'tokenized_paragraphs' : tokenized paragraphs   
+     - 'url' : url of html page data taken from  
+     - 'speeches' : each new author/speaker creates a speech   
+           - 'speaker' : author/speaker of speech  
+           - 'paragraphs' : list of paragraphs in given speech (as String)  
+           - 'tokenized_paragraphs' : tokenized paragraphs   
   }   
  
  2. metadata_[mode].jsonlist   
