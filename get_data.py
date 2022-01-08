@@ -4,8 +4,11 @@ import json
 import gzip
 
 def get_speeches(url, soup, mode):
-
-    pres = soup.find(class_="field-title").text.replace("\n", '')
+    pres = soup.find(class_="field-title")
+    if pres:
+        pres = pres.text.replace("\n", '')
+    else:
+        pres = url.split("/")[-1]
     body = soup.find(class_="field-docs-content")
     speeches = []
     turns = body.find_all("p")
@@ -44,12 +47,8 @@ def get_speeches(url, soup, mode):
             speeches[-1]["tokenized"].append(turn.text.split()) 
         speaker = ""
 
-    if len(speeches) > 1:
-        if speeches[1]["speaker"] == "PARTICIPANTS" or "MODERATORS":
-            del speeches[1] 
-        if speeches[0] and speeches[0]["speaker"] == "PARTICIPANTS" or "MODERATORS":
-            del speeches[0] 
-
+    # if speeches[0]["speaker"] == "PARTICIPANTS" or speeches[0]["speaker"] == "MODERATORS":
+    #     del speeches[0] 
     return speeches
 
 def parse_debate(url, mode):
@@ -57,7 +56,12 @@ def parse_debate(url, mode):
     soup = BeautifulSoup(page.content, "html.parser")
 
     # metadata
-    name = soup.find(class_="field-ds-doc-title").text.replace("\n", '')
+    name = soup.find(class_="field-ds-doc-title")
+    if name:
+        name = name.text.replace("\n", '')
+    else:
+        name = url.split("/")[-1]
+
     date = soup.find(class_="date-display-single").text.replace("\n", '')
     metadata = {
         "url" : url,

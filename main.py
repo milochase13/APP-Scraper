@@ -16,9 +16,9 @@ def main(base_url, stem, filename, mode):
     get_data.zip_file(filename)
 
 if __name__ == "__main__":
-    filename = 'debates.jsonlist'
+    filename = 'campaign_documents.jsonlist' 
     base_url = "https://www.presidency.ucsb.edu/documents/app-categories/elections-and-transitions/"
     stem = "https://www.presidency.ucsb.edu/"
-    mode = "debates"
+    mode = "campaign-documents"
 
     main(base_url, stem, filename, mode)
