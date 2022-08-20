@@ -1,0 +1,18 @@
+{ 	
+	"60" : { "d" : "John Kennedy", "r" : "Richard Nixon", "incumbant" : "NA" },
+	"64" : { "d" : "Lyndon Johnson", "r" : "Barry Goldwater", "incumbant" : "Lyndon Johnson" },
+	"68" : { "d" : "Hubert Humphrey", "r" : "Richard Nixon", "incumbant" : "NA" },
+	"72" : { "d" : "George_McGovern", "r" : "Richard Nixon", "incumbant" : "Richard Nixon" },
+	"76" : { "d" : "Jimmy Carter", "r" : "Gerald Ford", "incumbant" : "Gerald Ford" },
+	"80" : { "d" : "Jimmy Carter", "r" : "Ronald Reagan", "incumbant" : "Jimmy Carter" },
+	"84" : { "d" : "Walter Mondale", "r" : "Ronald Reagan", "incumbant" : "Ronald Reagan" },
+	"88" : { "d" : "Michael Dukakis", "r" : "George Bush", "incumbant" : "NA" },
+	"92" : { "d" : "Bill Clinton", "r" : "George Bush", "incumbant" : "George Bush" },
+	"96" : { "d" : "Bill Clinton", "r" : "Bob Dole", "incumbant" : "Bill Clinton" },
+	"00" : { "d" : "Al Gore", "r" : "George Bush", "incumbant" : "NA" },
+	"04" : { "d" : "John Kerry", "r" : "George Bush", "incumbant" : "George Bush" },
+	"08" : { "d" : "Barack Obama", "r" : "John McCain", "incumbant" : "NA" },
+	"12" : { "d" : "Barack Obama", "r" : "Mitt Romney", "incumbant" : "Barack Obama" },
+	"16" : { "d" : "Hillary Clinton", "r" : "Donald Trump", "incumbant" : "NA" },
+	"20" : { "d" : "Joe Biden", "r" : "Donald Trump", "incumbant" : "Donald Trump" }
+}

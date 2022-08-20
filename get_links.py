@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import json
 
 def get_links(gen_url, subsection, items = 5000):
     url = gen_url + subsection + "?items_per_page=" + str(items)
